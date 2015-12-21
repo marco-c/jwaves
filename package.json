@@ -1,0 +1,26 @@
+{
+  "name": "jwaves",
+  "version": "1.0.0",
+  "description": "JWaves - Simulation of a vibrating rope",
+  "dependencies": {},
+  "devDependencies": {
+    "fs-extra": "^0.26.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marco-c/jwaves.git"
+  },
+  "keywords": [
+    "waves",
+    "math"
+  ],
+  "author": "Marco Castelluccio <marco@mozilla.com>",
+  "license": "MPL-1.1",
+  "bugs": {
+    "url": "https://github.com/marco-c/jwaves/issues"
+  },
+  "homepage": "https://github.com/marco-c/jwaves#readme"
+}
