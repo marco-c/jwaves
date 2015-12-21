@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+<title>Onde</title>
+<script type="text/javascript">
+/* ***** BEGIN LICENSE BLOCK *****
+ Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ 
+ The contents of this file are subject to the Mozilla Public License Version 
+ 1.1 (the "License"); you may not use this file except in compliance with 
+ the License. You may obtain a copy of the License at 
+ http://www.mozilla.org/MPL/
+ 
+ Software distributed under the License is distributed on an "AS IS" basis,
+ WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ for the specific language governing rights and limitations under the
+ License.
+ 
+ The Original Code is jwaves.
+ 
+ The Initial Developer of the Original Code is
+ Marco Castelluccio.
+ Portions created by the Initial Developer are Copyright (C) 2011
+ the Initial Developer. All Rights Reserved.
+ 
+ Contributor(s):
+ Marco Castelluccio (mar.castelluccio@studenti.unina.it)
+
+ Alternatively, the contents of this file may be used under the terms of
+ either the GNU General Public License Version 2 or later (the "GPL"), or
+ the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ in which case the provisions of the GPL or the LGPL are applicable instead
+ of those above. If you wish to allow use of your version of this file only
+ under the terms of either the GPL or the LGPL, and not to allow others to
+ use your version of this file under the terms of the MPL, indicate your
+ decision by deleting the provisions above and replace them with the notice
+ and other provisions required by the GPL or the LGPL. If you do not delete
+ the provisions above, a recipient may use your version of this file under
+ the terms of any one of the MPL, the GPL or the LGPL.
+ 
+ ***** END LICENSE BLOCK ***** */
+
+  var canvas;
+  var freq1, freq2, freq3, freq4, freq5, freq6, freq7, freq8, freq9, freq10;
+  var speed, friction;
+
+  function onda(x, t) {
+    var y = 0;
+
+    if (freq1) {
+      y += freq1 * Math.sin(1*(Math.PI/6) * x) * Math.cos(1*(Math.PI/6) * t);
+    }
+
+    if (freq2) {
+      y += freq2 * Math.sin(2*(Math.PI/6) * x) * Math.cos(2*(Math.PI/6) * t);
+    }
+
+    if (freq3) {
+      y += freq3 * Math.sin(3*(Math.PI/6) * x) * Math.cos(3*(Math.PI/6) * t);
+    }
+
+    if (freq4) {
+      y += freq4 * Math.sin(4*(Math.PI/6) * x) * Math.cos(4*(Math.PI/6) * t);
+    }
+
+    if (freq5) {
+      y += freq5 * Math.sin(5*(Math.PI/6) * x) * Math.cos(5*(Math.PI/6) * t);
+    }
+
+    if (freq6) {
+      y += freq6 * Math.sin(6*(Math.PI/6) * x) * Math.cos(6*(Math.PI/6) * t);
+    }
+
+    if (freq7) {
+      y += freq7 * Math.sin(7*(Math.PI/6) * x) * Math.cos(7*(Math.PI/6) * t);
+    }
+
+    if (freq8) {
+      y += freq8 * Math.sin(8*(Math.PI/6) * x) * Math.cos(8*(Math.PI/6) * t);
+    }
+
+    if (freq9) {
+      y += freq9 * Math.sin(9*(Math.PI/6) * x) * Math.cos(9*(Math.PI/6) * t);
+    }
+
+    if (freq10) {
+      y += freq10 * Math.sin(10*(Math.PI/6) * x) * Math.cos(10*(Math.PI/6) * t);
+    }
+
+    if (friction) {
+      y = y * Math.exp(-friction * t);
+    }
+
+    return y;
+  }
+
+  function drawRope(ctx, t) {
+    var N = 300;
+    var dx = 1.92 * (Math.PI) / N;
+    var x = 0;
+    var px = 200;
+    var py = 100;
+
+    ctx.beginPath();
+    ctx.moveTo(px, py);
+
+    for (var i = 0; i < N; i++) {
+      x += dx;
+      y = onda(x, t);
+
+      px += 60 * dx;
+      py = 100 - y;
+
+      ctx.lineTo(px, py);
+    }
+
+    ctx.stroke(); 
+    ctx.closePath();
+  }
+
+  function circle(ctx, x, y, r) {
+    ctx.beginPath();
+    ctx.arc(x,y,r, 0, Math.PI*2, true);
+    ctx.stroke(); 
+    ctx.closePath();
+  }
+
+  function line(ctx, x0, y0, x1, y1) {
+    ctx.beginPath();
+
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x1, y1);
+
+    ctx.stroke(); 
+    ctx.closePath();
+  }
+
+  function dot(ctx, x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI*2, true);
+    ctx.fill(); 
+    ctx.closePath();
+  }
+
+  function circleDot(ctx, t) {
+    var x = 100 - 50 * Math.sin(Math.PI/6 * t);
+    var y = 100 - 50 * Math.cos(Math.PI/6 * t);
+
+    ctx.fillStyle = "Orange";
+    dot(ctx,x,y);
+
+    ctx.strokeStyle = "rgba(0,255,255,0.5)";
+    ctx.lineWidth = 1.5;
+
+    line(ctx, 100, 100, x, y);
+    line(ctx, x, 100, x, y);
+  }
+
+  function bounceDot(ctx, t) {
+    var x = 150;
+    var y = 100 - 50 * Math.cos(Math.PI/6 * t);
+
+    ctx.fillStyle = "Orange";
+    dot(ctx,x,y);
+
+    ctx.strokeStyle = "rgba(0,255,255,0.4)";
+    ctx.lineWidth = 1.5;
+
+    line(ctx, 150,100, x,y);
+  }
+
+  var step = 0;
+  function draw(ctx) {
+    if (step > 3000) { // Ogni 20 * 3000 ms (60 secondi), il tempo si azzera.
+      step = 0;
+    }
+
+    var t = step++ * speed;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "rgba(0,0,0,0)";
+    ctx.strokeStyle = "rgba(255,255,255,0.6)";
+    ctx.lineWidth = 2.5;
+
+    drawRope(ctx, t);
+
+    circle(ctx, 100, 100, 50);
+
+    ctx.strokeStyle = "LightGreen";
+    ctx.lineWidth = 0.6;
+
+    line(ctx, 25,100, 563,100);
+    line(ctx, 100,25, 100,175);
+    line(ctx, 150,25, 150,175);
+
+    circleDot(ctx, t);
+    bounceDot(ctx, t);
+  }
+
+  window.onload = function () {
+    canvas = document.getElementById('onde_canvas');
+    var ctx = canvas.getContext('2d');
+    setInterval(function () {
+      draw(ctx);
+    }, 20);
+
+    speed = 0.1;
+    friction = 0;
+    freq1 = 50; freq2 = 0; freq3 = 0; freq4 = 0; freq5 = 0; freq6 = 0; freq7 = 0; freq8 = 0; freq9 = 0; freq10 = 0;
+
+    document.getElementById('speed').value = 50;
+    document.getElementById('friction').value = 0;
+    document.getElementById('freq1').value = 50;
+    for (var i = 2; i <= 10; i++) {
+      document.getElementById('freq' + i).value = 0;
+    }
+  }
+</script> 
+</head> 
+<body style="color:Gray; background-color:Black; font-family: cursive; width:100%; height:100%"> 
+	<canvas id="onde_canvas" width="600px" height="200px">Canvas non supportato. Installa Firefox.</canvas>
+
+	<br><br>Simulazione di corda vibrante
+	<div style="opacity:0.7;">cambia i pesi delle frequenze per avere nuove forme d'onda.</div>
+
+	<form style="opacity:0.7;">
+		<br><br>Frequenze:	<input id="freq1" size="3" value="50" onkeyup="window.freq1 = this.value;" type="text">
+							<input id="freq2" size="3" value="0" onkeyup="window.freq2 = this.value;" type="text">
+							<input id="freq3" size="3" value="0" onkeyup="window.freq3 = this.value;" type="text">
+							<input id="freq4" size="3" value="0" onkeyup="window.freq4 = this.value;" type="text">
+							<input id="freq5" size="3" value="0" onkeyup="window.freq5 = this.value;" type="text">
+							<input id="freq6" size="3" value="0" onkeyup="window.freq6 = this.value;" type="text">
+							<input id="freq7" size="3" value="6" onkeyup="window.freq7 = this.value;" type="text">
+							<input id="freq8" size="3" value="8989" onkeyup="window.freq8 = this.value;" type="text">
+							<input id="freq9" size="3" value="0" onkeyup="window.freq9 = this.value;" type="text">
+							<input onkeyup="window.freq10 = this.value;" id="freq10" size="3" value="3" type="text">
+		<br><br><br>Velocita': <input id="speed" min="0" max="300" step="1" value="50" size="3" oninput="window.speed = this.value / 500; console.log(this.value)" type="range">
+		<br><br><br>Attrito: <input id="friction" min="0" max="300" step="1" value="0" size="3" oninput="window.friction = this.value / 1000;" type="range">
+	</form>
+
+    <br><br><font size="1.5">Copyright (C) 2011 Marco Castelluccio - Source code released under the Mozilla Public License (<a href="https://www.mozilla.org/MPL/MPL-1.1.html">https://www.mozilla.org/MPL/MPL-1.1.html</a>)</font>
+ 
+</body>
+</html>
