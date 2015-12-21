@@ -21,3 +21,9 @@ gulp.task('offline', function() {
     ],
   });
 });
+
+gulp.task('deploy', ['default'], function() {
+  return oghliner.deploy({
+    rootDir: 'dist',
+  });
+});
