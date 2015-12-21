@@ -2,6 +2,7 @@
   "name": "jwaves",
   "version": "1.0.0",
   "description": "JWaves - Simulation of a vibrating rope",
+  "private": true,
   "dependencies": {},
   "devDependencies": {
     "fs-extra": "^0.26.3"
